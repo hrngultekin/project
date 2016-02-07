@@ -12,7 +12,7 @@
 # any later version.
 
 # Qt Libraries
-from PyQt4 import Qt
+from PyQt5 import Qt,QtWidgets
 
 # PDS Container
 from pds.container import PApplicationContainer
@@ -22,18 +22,18 @@ class PNetworkManager(PApplicationContainer):
         PApplicationContainer.__init__(self, parent)
 
     def startNetworkManager(self):
-        ret = self.start("nm-connection-editor", ("--winid", str(self.winId())))
+        ret = self.start("nm-connection-editor", ["--winid", str(self.winId())])
 
         if ret[0]:
             self.setMinimumSize(Qt.QSize(450, 200))
             self.show()
-
+        print ret
         return ret
 
 if __name__ == "__main__":
     import sys
 
-    app = Qt.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     ui = PNetworkManager()
     ui.startNetworkManager()

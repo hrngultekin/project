@@ -9,12 +9,16 @@
 # Software Foundation; either version 2 of the License, or (at your option)
 # any later version.
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
 from pds.qpagewidget import QPageWidget
 
 class DemoPage(QWidget):
+    pagePrevious=pyqtSignal()
+    pageNext=pyqtSignal()
+    
     def __init__(self, parent = None, text = '', line_edit = ''):
         QWidget.__init__(self, parent)
         self.layout = QVBoxLayout(self)
@@ -27,17 +31,22 @@ class DemoPage(QWidget):
 
         btnNext = QPushButton("Next", self)
         self.layout.addWidget(btnNext)
-        btnNext.clicked.connect(lambda: self.emit(SIGNAL("pageNext()")))
+        
+        
+        btnNext.clicked.connect(lambda: pageNext.emit())
 
         btnPrev = QPushButton("Previous", self)
         self.layout.addWidget(btnPrev)
-        btnPrev.clicked.connect(lambda: self.emit(SIGNAL("pagePrevious()")))
+        
+        btnPrev.clicked.connect(lambda: pagePrevious.emit())
 
     def text(self):
         return self.line.text()
 
 # Basic test app
 class Test(QWidget):
+    setCurrent=pyqtSignal(int)
+    
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
         self.layout = QHBoxLayout(self)
@@ -61,7 +70,9 @@ class Test(QWidget):
         button = QPushButton("Click Me !", self)
         button.clicked.connect(lambda: QMessageBox.information(self,
                                 "QPageWidget Information", line.text()))
-        button.clicked.connect(lambda: button.emit(SIGNAL("setCurrent(int)"), 2))
+        
+        
+        button.clicked.connect(lambda: setCurrent.emit(2))
 
         pageWidget.createPage(button, inMethod=lambda: QMessageBox.information(self, "QPageWidget Information",
                                                         "You reached the last page, after click the page button it goes back to the Green page."))

@@ -16,8 +16,9 @@
 import copy
 
 # Qt Libraries
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 
 # PREDEFINED POSITIONS
 # --------------------
@@ -32,18 +33,18 @@ BACKWARD = QtCore.QTimeLine.Backward
 (IN, OUT, FINISHED) = range(3)
 # --------------------
 
-class PAbstractBox(QtGui.QWidget):
+class PAbstractBox(QtWidgets.QWidget):
     def __init__(self, parent):
 
         # Overlay widget, it should be initialized at first
-        self.__overlay = QtGui.QWidget(parent)
+        self.__overlay = QtWidgets.QWidget(parent)
         self.__overlay.hide()
         self.__overlay_enabled = False
         self.__overlay_animated = False
         self.__overlay_styled = False
 
         # Main widget initializing on parent widget
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.hide()
 
         # Pre-defined states
@@ -124,7 +125,7 @@ class PAbstractBox(QtGui.QWidget):
 
     def enableShadow(self, offset = 3, radius = 9, color = 'black'):
         # Enable shadow for mainwidget with given features
-        self.__effect = QtGui.QGraphicsDropShadowEffect(self)
+        self.__effect = QtWidgets.QGraphicsDropShadowEffect(self)
         self.__effect.setBlurRadius(radius)
         self.__effect.setOffset(offset)
         self.__effect.setColor(QtGui.QColor(color))
@@ -328,9 +329,9 @@ class PMessageBox(PAbstractBox):
     def __init__(self, parent):
         PAbstractBox.__init__(self, parent)
 
-        self.layout = QtGui.QHBoxLayout(self)
+        self.layout = QtWidgets.QHBoxLayout(self)
 
-        self.icon = QtGui.QLabel(self)
+        self.icon = QtWidgets.QLabel(self)
         self.icon.hide()
         self.layout.addWidget(self.icon)
 
@@ -338,7 +339,7 @@ class PMessageBox(PAbstractBox):
         self.busy.hide()
         self.layout.addWidget(self.busy)
 
-        self.label = QtGui.QLabel(self)
+        self.label = QtWidgets.QLabel(self)
         self.layout.addWidget(self.label)
 
         self._animation = 2

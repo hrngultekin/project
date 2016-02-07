@@ -13,20 +13,20 @@
 import pds
 
 from time import time
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from pds.qiconloader import QIconLoader
 
 class Ui_Test(object):
     def setupUi(self, Test):
         Test.setObjectName("Test")
         Test.resize(460, 300)
-        self.gridLayout = QtGui.QGridLayout(Test)
+        self.gridLayout = QtWidgets.QGridLayout(Test)
         self.gridLayout.setObjectName("gridLayout")
-        self.name = QtGui.QComboBox(Test)
+        self.name = QtWidgets.QComboBox(Test)
         self.name.setObjectName("name")
         self.name.setEditable(True)
         self.gridLayout.addWidget(self.name, 0, 0, 1, 1)
-        self.size = QtGui.QComboBox(Test)
+        self.size = QtWidgets.QComboBox(Test)
         self.size.setObjectName("size")
         self.size.setMaximumSize(QtCore.QSize(100, 16777215))
         self.size.addItem("128")
@@ -36,11 +36,11 @@ class Ui_Test(object):
         self.size.addItem("22")
         self.size.addItem("16")
         self.gridLayout.addWidget(self.size, 0, 1, 1, 1)
-        self.getButton = QtGui.QPushButton(Test)
+        self.getButton = QtWidgets.QPushButton(Test)
         self.getButton.setText("Get Icon")
         self.getButton.setMaximumSize(QtCore.QSize(100, 16777215))
         self.gridLayout.addWidget(self.getButton, 0, 2, 1, 1)
-        self.label = QtGui.QLabel(Test)
+        self.label = QtWidgets.QLabel(Test)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 1, 0, 1, 3)
         self.getButton.clicked.connect(self.showIcon)
@@ -51,7 +51,7 @@ class Ui_Test(object):
         # Pds.session = pds.DefaultDe
 
         self.loader = QIconLoader(Pds, debug = True)
-        completer = QtGui.QCompleter(self.loader._available_icons)
+        completer = QtWidgets.QCompleter(self.loader._available_icons)
         self.name.setCompleter(completer)
         self.getButton.setShortcut("Return")
 
@@ -64,14 +64,13 @@ class Ui_Test(object):
         a = time()
         print "Clicked !"
         icons = unicode(self.name.currentText())
-        self.label.setPixmap(self.loader.load(icons.split(','), 
-            self.size.currentText()))
+        self.label.setPixmap(self.loader.load(icons.split(','), self.size.currentText()))
         print 'It took : ', time() - a
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
-    Test = QtGui.QWidget()
+    app = QtWidgets.QApplication(sys.argv)
+    Test = QtWidgets.QWidget()
     a = time()
     print "Started !"
     ui = Ui_Test()

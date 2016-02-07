@@ -13,16 +13,22 @@
 # any later version.
 
 # Qt Libraries
-from PyQt4 import Qt
+#from PyQt5 import Qt
+from PyQt5 import QtWidgets 
+from PyQt5.QtCore import *
+from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtWidgets import QWidget
 
-class PApplicationContainer(Qt.QX11EmbedContainer):
+class PApplicationContainer(QWidget):
+    processFinished=pyqtSignal([int,int])	
     def __init__(self, parent = None, process = None, args = ()):
-        Qt.QX11EmbedContainer.__init__(self, parent)
-
-        self._label = None
+        QWidget.__init__(self, parent)
+	self._label = None
         self._proc = None
         self._process = process
         self._args = args
+        self.parent=parent
+
 
     def start(self, process = None, args = ()):
         process = process or self._process
@@ -34,11 +40,12 @@ class PApplicationContainer(Qt.QX11EmbedContainer):
         self._process = process
         self._args = args
 
-        self._proc = Qt.QProcess(self)
+        self._proc = QProcess(self)
         self._proc.finished.connect(self._finished)
         self._proc.start(process, args)
+        
 
-        self.clientClosed.connect(self._proc.close)
+        #self.clientClose.connect(self._proc.close)	clientClose sinyali yok
 
         return (True, "'%s' process successfully started with pid = %s" % (process, self._proc.pid()))
 
@@ -50,7 +57,8 @@ class PApplicationContainer(Qt.QX11EmbedContainer):
         event.accept()
 
     def _finished(self, exitCode, exitStatus):
-        self.emit(Qt.SIGNAL("processFinished"), exitCode, exitStatus)
+        self.processFinished[int,int].emit(exitCode, exitStatus)
+        print exitCode, exitStatus
         if exitCode != 0:
             self._showMessage("%s process finished with code %s" % (self._process, exitCode))
         else:
@@ -58,7 +66,7 @@ class PApplicationContainer(Qt.QX11EmbedContainer):
 
     def _showMessage(self, message):
         if not self._label:
-            self._label = Qt.QLabel(self)
+            self._label = QtWidgets.QLabel(self)
 
         self._label.setText(message)
         self._label.show()
@@ -66,6 +74,6 @@ class PApplicationContainer(Qt.QX11EmbedContainer):
     def isRunning(self):
         if not self._proc:
             return False
-        return not self._proc.state() == Qt.QProcess.NotRunning
+        return not self._proc.state() == QProcess.NotRunning
 
 

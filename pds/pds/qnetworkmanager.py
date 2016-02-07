@@ -15,8 +15,9 @@ import dbus
 from dbus.mainloop.qt import DBusQtMainLoop
 
 # Qt Libraries
-from PyQt4 import QtGui
-from PyQt4.QtCore import *
+from PyQt5 import QtWidgets
+from PyQt5 import QtGui
+from PyQt5.QtCore import *
 
 # UI
 from pds.ui.ui_connectionitem import Ui_ConnectionItem
@@ -52,10 +53,10 @@ def get_icon(conn_type, state = False):
     return CONN_TYPES.get(conn_type,
                 QIconLoader.loadOverlayed("network-wired", state, 32, position = QIconLoader.TopLeft))
 
-class ConnectionItem(QtGui.QWidget, Ui_ConnectionItem):
+class ConnectionItem(QtWidgets.QWidget, Ui_ConnectionItem):
 
     def __init__(self, parent, connection):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
 
         self.available = True
@@ -122,10 +123,10 @@ class ConnectionItem(QtGui.QWidget, Ui_ConnectionItem):
     def toggleButtons(self, toggle=False):
         self.button.setVisible(toggle)
 
-class QNetworkManager(QtGui.QListWidget):
-
+class QNetworkManager(QtWidgets.QListWidget):
+    stateChanged=pyqtSignal()
     def __init__(self, parent = None):
-        QtGui.QListWidget.__init__(self, parent)
+        QtWidgets.QListWidget.__init__(self, parent)
         self.setAlternatingRowColors(True)
 
         self.nm = NetworkManager()
@@ -138,7 +139,7 @@ class QNetworkManager(QtGui.QListWidget):
         nm_interface.connect_to_signal("DeviceAdded", self.fillConnections)
         nm_interface.connect_to_signal("DeviceRemoved", lambda *args: self.showMessage("A device removed.", True))
         nm_interface.connect_to_signal("DeviceRemoved", self.fillConnections)
-        nm_interface.connect_to_signal("PropertiesChanged", lambda *args: self.emit(SIGNAL("stateChanged()")))
+        nm_interface.connect_to_signal("PropertiesChanged", lambda *args: self.stateChanged.emit())
 
         nm_settings_bus = self.bus.get_object(NM_BUS_NAME, NM_SETTINGS_OBJECT_PATH)
         nm_settings = dbus.Interface(nm_settings_bus, NM_SETTINGS)
@@ -170,7 +171,7 @@ class QNetworkManager(QtGui.QListWidget):
         self.clearList()
         actives = self.nm.active_connections
         for connection in self.nm.connections:
-            item = QtGui.QListWidgetItem()
+            item = QtWidgets.QListWidgetItem()
             item.setSizeHint(QSize(200, 38))
             self.addItem(item)
             self.setItemWidget(item, ConnectionItem(self, connection))
@@ -218,7 +219,7 @@ class QNetworkManager(QtGui.QListWidget):
 # Basic test app
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     DBusQtMainLoop(set_as_default = True)
     nm = QNetworkManager()
     nm.show()

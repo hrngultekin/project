@@ -12,9 +12,9 @@
 # Software Foundation; either version 2 of the License, or (at your option)
 # any later version.
 
-from PyQt4.QtCore import SIGNAL
-from PyQt4.QtCore import SLOT
-from PyQt4.QtCore import QThread
+from PyQt5.QtCore import pyqtSignal
+#from PyQt5.QtCore import SLOT
+from PyQt5.QtCore import QThread
 
 class PThread(QThread):
     def __init__(self, parent, action, callback=None, \
@@ -22,7 +22,7 @@ class PThread(QThread):
         QThread.__init__(self,parent)
 
         if callback:
-            parent.connect(self, SIGNAL("finished()"), callback)
+            parent.finished.connect(callback)
 
         self.action = action
         self.args = args
@@ -37,7 +37,7 @@ class PThread(QThread):
             if self.exceptionHandler:
                 self.exceptionHandler(e)
         finally:
-            self.connect(self.parent(), SIGNAL("cleanUp()"), SLOT("deleteLater()"))
+            self.parent.cleanUp.connect(deleteLater())
 
     def cleanUp(self):
         self.deleteLater()

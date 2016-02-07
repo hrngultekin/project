@@ -9,11 +9,11 @@
 # Software Foundation; either version 2 of the License, or (at your option)
 # any later version.
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 from pds.gui import *
 from pds.tests.ui_gui import Ui_PdsTest
 
-class PTestUI(QtGui.QWidget):
+class PTestUI(QtWidgets.QWidget):
 
     STYLE = """color:white;
                font-size:16pt;
@@ -22,7 +22,7 @@ class PTestUI(QtGui.QWidget):
                border-radius:4px;"""
 
     def __init__(self, parent = None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.ui = Ui_PdsTest()
         self.ui.setupUi(self)
@@ -47,7 +47,7 @@ class PTestUI(QtGui.QWidget):
         if self.msg:
             self.msg._resizeCallBacks(event)
 
-        QtGui.QWidget.resizeEvent(self, event)
+        QtWidgets.QWidget.resizeEvent(self, event)
 
     def showClicked(self):
         if self.msg:
@@ -73,7 +73,7 @@ class PTestUI(QtGui.QWidget):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     PdsTest = PTestUI()
     PdsTest.show()
     sys.exit(app.exec_())

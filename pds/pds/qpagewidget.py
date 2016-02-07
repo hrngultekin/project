@@ -4,25 +4,25 @@
 """ QPageWidget provides wizard like animated stack widget. """
 
 # QtCore Libraries
-from PyQt4.QtCore import Qt
-from PyQt4.QtCore import QSize
-from PyQt4.QtCore import QRect
-from PyQt4.QtCore import QEvent
-from PyQt4.QtCore import QTimer
-from PyQt4.QtCore import SIGNAL
-from PyQt4.QtCore import QTimeLine
-from PyQt4.QtCore import QEasingCurve
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QRect
+from PyQt5.QtCore import QEvent
+from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import QTimeLine
+from PyQt5.QtCore import QEasingCurve
 
 # QtGui Libraries
-from PyQt4.QtGui import QFrame
-from PyQt4.QtGui import QLabel
-from PyQt4.QtGui import QWidget
-from PyQt4.QtGui import QLineEdit
-from PyQt4.QtGui import QBoxLayout
-from PyQt4.QtGui import QScrollArea
-from PyQt4.QtGui import QPushButton
-from PyQt4.QtGui import QMessageBox
-from PyQt4.QtGui import QResizeEvent
+from PyQt5.QtWidgets import QFrame
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QLineEdit
+from PyQt5.QtWidgets import QBoxLayout
+from PyQt5.QtWidgets import QScrollArea
+from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtGui import QResizeEvent
 
 __author__      = "Gökmen Göksel"
 __email__       = "gokmen@pardus.org.tr"
@@ -88,7 +88,7 @@ class QPageWidget(QScrollArea):
             self.__scrollBar = self.verticalScrollBar()
             self.__base_value = self.height
         self.layout.setSpacing(0)
-        self.layout.setMargin(0)
+        #self.layout.setMargin(0)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         # Return to first
         self.__return_to_first = rtf
@@ -200,9 +200,9 @@ class QPageWidget(QScrollArea):
         self.layout.addWidget(self.__tmp_page.widget)
 
         # Create connections for page navigation signals from new page
-        self.connect(page.widget, SIGNAL("pageNext()"), self.next)
-        self.connect(page.widget, SIGNAL("pagePrevious()"), self.prev)
-        self.connect(page.widget, SIGNAL("setCurrent(int)"), self.setCurrent)
+        page.widget.pageNext.connect(self.next)
+        page.widget.pagePrevious.connect(self.prev)
+        page.widget.setCurrent[int].connect(self.setCurrent)
 
     def __setCurrent(self, pageNumber):
         """ Internal method to set current page index. """

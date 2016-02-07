@@ -21,8 +21,8 @@ from os import environ
 import piksemel
 import gettext
 
-# PyQt4 Core Libraries
-from PyQt4.QtCore import QSettings
+# PyQt5 Core Libraries
+from PyQt5.QtCore import QSettings, QVariant
 
 # Logging
 import logging
@@ -32,7 +32,7 @@ from pds.environments import *
 
 class Pds:
 
-    SupportedDesktops = (DefaultDe, Kde4, Kde3, Xfce, Enlightenment, LXDE,
+    SupportedDesktops = (DefaultDe, Kde5, Kde4, Kde3, Xfce, Enlightenment, LXDE,
                         Fluxbox, Gnome, Gnome3, Mate)
 
     def __init__(self, catalogName='', debug=False):
@@ -102,20 +102,22 @@ class Pds:
                 settings = self.parse(self.config_file, force = True)
             else:
                 return default
+            
             _value = settings.value(key)
-            if not _value.toString():
+            variant_value=QVariant(_value)
+            if not variant_value.typeName()=='QString':
                 # Sometimes kdeglobals stores values without quotes
-                _value = _value.toStringList()
+                #_value = _value.toStringList()
                 if _value:
                     value = _value.join(',')
             else:
-                value = unicode(_value.toString())
+                value = unicode(_value)
             if not value or value == '':
                 logging.debug('Switching to default conf')
                 alternateConfig = self.session.DefaultConfigPath or \
                         path.join(self.install_prefix, self.session.ConfigFile)
                 settings = self.parse(alternateConfig, force = True)
-                value = unicode(settings.value(key, default).toString())
+                value = unicode(settings.value(key, default))
 
         elif self.session.ConfigType == 'xml':
             settings = self.parse(self.config_file, 'xml').getTag('property')

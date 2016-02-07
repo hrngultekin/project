@@ -12,7 +12,8 @@
 # any later version.
 
 # Qt Libraries
-from PyQt4 import Qt
+from PyQt5 import QtWidgets 		# Qt
+from PyQt5.QtCore import QObject, pyqtSignal
 
 # PDS Container
 from pds.container import PApplicationContainer
@@ -25,19 +26,19 @@ class PMplayer(PApplicationContainer):
             parent.closeEvent = self.closeEvent
 
     def openMedia(self, path):
-        ret = self.start("mplayer", ("-wid", str(self.winId()), path))
-
+        ret = self.start("mplayer", ("-wid", str(self.winId()), str(path)))
+	print ret
         if ret[0]:
             self.show()
 
         return ret
 
-class TestUI(Qt.QWidget):
+class TestUI(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        Qt.QWidget.__init__(self, parent)
-        self.layout = Qt.QGridLayout(self)
+        QtWidgets.QWidget.__init__(self, parent)
+        self.layout = QtWidgets.QGridLayout(self)
 
-        self.pushbutton = Qt.QPushButton("Open Media", self)
+        self.pushbutton = QtWidgets.QPushButton("Open Media", self)
         self.layout.addWidget(self.pushbutton)
 
         self.mplayer = PMplayer(self)
@@ -46,14 +47,14 @@ class TestUI(Qt.QWidget):
         self.pushbutton.clicked.connect(self.getMedia)
 
     def getMedia(self):
-        self.mplayer.openMedia(
-                Qt.QFileDialog.getOpenFileName(self,
-                    "Open Media", "/", "Media Files (*.ogv *.mov *.avi)"))
+	self.mplayer.openMedia(
+                QtWidgets.QFileDialog.getOpenFileName(self,
+                    "Open Media", "/", "Media Files (*.ogv *.mov *.avi)")[0])
 
 if __name__ == "__main__":
     import sys
 
-    app = Qt.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     ui = TestUI()
     ui.show()

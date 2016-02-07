@@ -14,18 +14,18 @@
 # Software Foundation; either version 2 of the License, or (at your option)
 # any later version.
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui ,QtWidgets
 from pds.qprogressindicator import QProgressIndicator
 
-class UI(QtGui.QWidget):
+class UI(QtWidgets.QWidget):
 
     def __init__(self, parent = None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
-        self.gl = QtGui.QGridLayout(self)
+        self.gl = QtWidgets.QGridLayout(self)
 
-        butonh = QtGui.QPushButton("click to hide", self)
-        butons = QtGui.QPushButton("click to show", self)
+        butonh = QtWidgets.QPushButton("click to hide", self)
+        butons = QtWidgets.QPushButton("click to show", self)
         self.busy = QProgressIndicator(self)
 
         self.gl.addWidget(butonh)
@@ -38,7 +38,7 @@ class UI(QtGui.QWidget):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     ui = UI()
     ui.show()
     sys.exit(app.exec_())

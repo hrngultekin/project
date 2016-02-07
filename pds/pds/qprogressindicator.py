@@ -15,13 +15,13 @@
 # any later version.
 
 # Qt Libraries
-from PyQt4.QtCore import Qt
-from PyQt4.QtCore import QSize
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QSize
 
-from PyQt4.QtGui import QColor
-from PyQt4.QtGui import QWidget
-from PyQt4.QtGui import QPainter
-from PyQt4.QtGui import QPalette
+from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QPainter
+from PyQt5.QtGui import QPalette
 
 class QProgressIndicator(QWidget):
 

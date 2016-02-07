@@ -27,6 +27,25 @@ class DefaultDe(object):
     ExtraDirs            = None
     IconKey              = None
     i18n                 = staticmethod(lambda x: x)
+# kde5 için sınıfı düzenlenecek ve kde5 için bilgiler istenecek!!!
+class Kde5(DefaultDe):
+    Name                 = 'kde'
+    SessionTypes         = ('/usr/share/xsessions/plasma-mediacenter')
+    Version              = '5'
+    VersionKey           = 'KDE_SESSION_VERSION'
+    ConfigPath           = ('$HOME/.local5/', '$HOME/.kde4/')
+    ConfigFile           = 'share/config/kdeglobals'
+    ConfigType           = 'ini'
+    #ConfigBin            = 'kde4-config'
+    #DefaultIconFile      = '/usr/share/icons/default.kde4'
+    DefaultIconTheme     = 'breeze' # breeze simge teması svg dosyalarından oluşuyor pds pd-ng uzantılı dosyalar açıyor
+    IconKey              = 'Icons/Theme'
+    #try:
+    #    from PyKDE4 import kdecore, kdeui
+    #    i18n                 = kdecore.i18n
+    #except:
+    #    pass
+
 
 class Kde4(DefaultDe):
     Name                 = 'kde'
@@ -40,11 +59,11 @@ class Kde4(DefaultDe):
     DefaultIconFile      = '/usr/share/icons/default.kde4'
     DefaultIconTheme     = 'oxygen'
     IconKey              = 'Icons/Theme'
-    try:
-        from PyKDE4 import kdecore, kdeui
-        i18n                 = kdecore.i18n
-    except:
-        pass
+    #try:
+    #    from PyKDE4 import kdecore, kdeui
+    #    i18n                 = kdecore.i18n
+    #except:
+    #    pass
 
 class Kde3(DefaultDe):
     Name                 = 'kde'
