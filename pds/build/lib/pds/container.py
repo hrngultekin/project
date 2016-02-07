@@ -43,7 +43,7 @@ class PApplicationContainer(QWidget):
         self._proc = QProcess(self)
         self._proc.finished.connect(self._finished)
         self._proc.start(process, args)
-        self.container=self.createWindowContainer(self._proc)
+        
 
         #self.clientClose.connect(self._proc.close)	clientClose sinyali yok
 

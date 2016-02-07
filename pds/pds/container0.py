@@ -13,22 +13,19 @@
 # any later version.
 
 # Qt Libraries
-#from PyQt5 import Qt
-from PyQt5 import QtWidgets 
-from PyQt5.QtCore import *
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5 import Qt
 from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import *
 
-class PApplicationContainer(QWidget):
-    processFinished=pyqtSignal([int,int])	
+
+class PApplicationContainer(QWindow):
     def __init__(self, parent = None, process = None, args = ()):
-        QWidget.__init__(self, parent)
-	self._label = None
+        QWindow.__init__(self, parent)
+
+        self._label = None
         self._proc = None
         self._process = process
         self._args = args
-        self.parent=parent
-
 
     def start(self, process = None, args = ()):
         process = process or self._process
@@ -40,12 +37,11 @@ class PApplicationContainer(QWidget):
         self._process = process
         self._args = args
 
-        self._proc = QProcess(self)
+        self._proc = Qt.QProcess(self)
         self._proc.finished.connect(self._finished)
         self._proc.start(process, args)
-        self.container=self.createWindowContainer(self._proc)
 
-        #self.clientClose.connect(self._proc.close)	clientClose sinyali yok
+        self.clientClosed.connect(self._proc.close)
 
         return (True, "'%s' process successfully started with pid = %s" % (process, self._proc.pid()))
 
@@ -57,8 +53,9 @@ class PApplicationContainer(QWidget):
         event.accept()
 
     def _finished(self, exitCode, exitStatus):
-        self.processFinished[int,int].emit(exitCode, exitStatus)
-        print exitCode, exitStatus
+        self.emit(Qt.SIGNAL("processFinished"), exitCode, exitStatus)
+        # sinyal oluşturmalıyım
+        
         if exitCode != 0:
             self._showMessage("%s process finished with code %s" % (self._process, exitCode))
         else:
@@ -66,7 +63,7 @@ class PApplicationContainer(QWidget):
 
     def _showMessage(self, message):
         if not self._label:
-            self._label = QtWidgets.QLabel(self)
+            self._label = Qt.QLabel(self)
 
         self._label.setText(message)
         self._label.show()
@@ -74,6 +71,6 @@ class PApplicationContainer(QWidget):
     def isRunning(self):
         if not self._proc:
             return False
-        return not self._proc.state() == QProcess.NotRunning
+        return not self._proc.state() == Qt.QProcess.NotRunning
 
 
