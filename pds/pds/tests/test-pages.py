@@ -9,15 +9,18 @@
 # Software Foundation; either version 2 of the License, or (at your option)
 # any later version.
 
-from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
 from pds.qpagewidget import QPageWidget
 
 class DemoPage(QWidget):
-    pagePrevious=pyqtSignal()
+    
+    #Emits
     pageNext=pyqtSignal()
+    pagePrevious=pyqtSignal()
+    
     
     def __init__(self, parent = None, text = '', line_edit = ''):
         QWidget.__init__(self, parent)
@@ -31,14 +34,11 @@ class DemoPage(QWidget):
 
         btnNext = QPushButton("Next", self)
         self.layout.addWidget(btnNext)
-        
-        
-        btnNext.clicked.connect(lambda: pageNext.emit())
+        btnNext.clicked.connect(lambda: self.pageNext.emit())
 
         btnPrev = QPushButton("Previous", self)
         self.layout.addWidget(btnPrev)
-        
-        btnPrev.clicked.connect(lambda: pagePrevious.emit())
+        btnPrev.clicked.connect(lambda: self.pagePrevious.emit())
 
     def text(self):
         return self.line.text()
@@ -72,7 +72,7 @@ class Test(QWidget):
                                 "QPageWidget Information", line.text()))
         
         
-        button.clicked.connect(lambda: setCurrent.emit(2))
+        button.clicked.connect(lambda: self.setCurrent[int].emit(2))
 
         pageWidget.createPage(button, inMethod=lambda: QMessageBox.information(self, "QPageWidget Information",
                                                         "You reached the last page, after click the page button it goes back to the Green page."))

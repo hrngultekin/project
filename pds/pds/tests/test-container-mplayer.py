@@ -47,7 +47,7 @@ class TestUI(QtWidgets.QWidget):
         self.pushbutton.clicked.connect(self.getMedia)
 
     def getMedia(self):
-	self.mplayer.openMedia(
+        self.mplayer.openMedia(
                 QtWidgets.QFileDialog.getOpenFileName(self,
                     "Open Media", "/", "Media Files (*.ogv *.mov *.avi)")[0])
 

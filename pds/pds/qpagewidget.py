@@ -13,7 +13,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QTimeLine
 from PyQt5.QtCore import QEasingCurve
 
-# QtGui Libraries
+# QtWidgets Libraries
 from PyQt5.QtWidgets import QFrame
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QWidget
@@ -22,6 +22,8 @@ from PyQt5.QtWidgets import QBoxLayout
 from PyQt5.QtWidgets import QScrollArea
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QMessageBox
+
+# QtGui Libraries
 from PyQt5.QtGui import QResizeEvent
 
 __author__      = "Gökmen Göksel"
@@ -57,6 +59,9 @@ class Page:
 class QPageWidget(QScrollArea):
     """ The QPageWidget provides a stack widget with animated page transitions. """
 
+    #Emits
+    currentChanged = pyqtSignal()
+    
     def __init__(self, parent = None, direction = "ltr", rtf = False):
         """ Creates a new QPageWidget on given parent object. 
 
@@ -66,6 +71,7 @@ class QPageWidget(QScrollArea):
         rtf: Return to first, if its True it flips to the first page 
              when next page requested at the last page
         """
+                
         # First initialize, QPageWidget is based on QScrollArea
         QScrollArea.__init__(self, parent)
 
@@ -88,7 +94,9 @@ class QPageWidget(QScrollArea):
             self.__scrollBar = self.verticalScrollBar()
             self.__base_value = self.height
         self.layout.setSpacing(0)
-        #self.layout.setMargin(0)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        #qboxlayout setmargin özelliği yok
+        #self.layout.setMargin(0)
 
         # Return to first
         self.__return_to_first = rtf
@@ -144,7 +152,7 @@ class QPageWidget(QScrollArea):
         self.__scrollBar.setValue(self.__current * self.__base_value())
 
         # Emit currentChanged SIGNAL
-        self.emit(SIGNAL("currentChanged()"))
+        self.currentChanged.emit()
 
     def event(self, event):
         """ Overrides the main event handler to catch resize events """
@@ -200,9 +208,12 @@ class QPageWidget(QScrollArea):
         self.layout.addWidget(self.__tmp_page.widget)
 
         # Create connections for page navigation signals from new page
-        page.widget.pageNext.connect(self.next)
-        page.widget.pagePrevious.connect(self.prev)
-        page.widget.setCurrent[int].connect(self.setCurrent)
+        try:
+            page.widget.pageNext.connect(self.next)
+            page.widget.pagePrevious.connect(self.prev)
+            page.widget.setCurrent[int].connect(self.setCurrent)
+        except:
+            pass
 
     def __setCurrent(self, pageNumber):
         """ Internal method to set current page index. """
