@@ -12,8 +12,9 @@
 #
 
 # PyQt
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets  import*
 # UI
 from firewallmanager.ui_main import Ui_MainWidget
 
@@ -36,9 +37,9 @@ from firewallmanager.pagedialog import PageDialog
 import context as ctx
 from context import *
 
-class MainWidget(QtGui.QWidget, Ui_MainWidget):
+class MainWidget(QtWidgets.QWidget, Ui_MainWidget):
     def __init__(self, parent, embed=False):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         if embed:
             self.setupUi(parent)
@@ -78,13 +79,13 @@ class MainWidget(QtGui.QWidget, Ui_MainWidget):
         # TBD
 
         # Signals
-        self.connect(self.comboFilter, QtCore.SIGNAL("currentIndexChanged(int)"), self.slotFilterChanged)
-        self.connect(self.pushNew, QtCore.SIGNAL("triggered(QAction*)"), self.slotOpenEdit)
-        self.connect(self.buttonBox, QtCore.SIGNAL("accepted()"), self.slotSaveEdit)
-        self.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), self.slotCancelEdit)
-        self.connect(self.animator, QtCore.SIGNAL("frameChanged(int)"), self.slotAnimate)
-        self.connect(self.animator, QtCore.SIGNAL("finished()"), self.slotAnimationFinished)
-        self.connect(self.widgetService, QtCore.SIGNAL("stateChanged(int)"), self.slotServiceChanged)
+        self.comboFilter.currentIndexChanged[int].connect(self.slotFilterChanged)
+        self.pushNew.triggered[QAction].connect(self.slotOpenEdit)
+        self.buttonBox.accepted.connect(self.slotSaveEdit)
+        self.buttonBox.rejected.connect(self.slotCancelEdit)
+        self.animator.frameChanged[int].connect(self.slotAnimate)
+        self.animator.finished.connect(self.slotAnimationFinished)
+        self.widgetService.stateChanged[int].connect(self.slotServiceChanged)
 
     def checkBackend(self):
         """
@@ -133,9 +134,9 @@ class MainWidget(QtGui.QWidget, Ui_MainWidget):
         """
         widget = ItemWidget(self.listItems, id_, title, description, type_, icon, state)
 
-        self.connect(widget, QtCore.SIGNAL("stateChanged(int)"), self.slotItemState)
-        self.connect(widget, QtCore.SIGNAL("editClicked()"), self.slotItemEdit)
-        self.connect(widget, QtCore.SIGNAL("deleteClicked()"), self.slotItemDelete)
+        widget.stateChanged[int].connect(self.slotItemState)
+        widget.editClicked.connect(self.slotItemEdit)
+        widget.deleteClicked.connect(self.slotItemDelete)
 
         return widget
 
@@ -183,7 +184,7 @@ class MainWidget(QtGui.QWidget, Ui_MainWidget):
         """
             Checks if item matches selected filter.
         """
-        filter = str(self.comboFilter.itemData(self.comboFilter.currentIndex()).toString())
+        filter = str(self.comboFilter.itemData(self.comboFilter.currentIndex()))
         if filter == "incoming" and item.getType() != "incoming":
             return False
         elif filter == "outcoming" and item.getType() != "outcoming":
@@ -202,11 +203,11 @@ class MainWidget(QtGui.QWidget, Ui_MainWidget):
             Builds "Add New" button menu.
         """
         # Create menu for "new" button
-        menu = QtGui.QMenu(self.pushNew)
+        menu = QtWidgets.QMenu(self.pushNew)
         self.pushNew.setMenu(menu)
 
         # New item
-        action = QtGui.QAction(i18n("Action"), self)
+        action = QtWidgets.QAction(i18n("Action"), self)
         action.setData(QtCore.QVariant("action"))
         menu.addAction(action)
 
@@ -290,7 +291,7 @@ class MainWidget(QtGui.QWidget, Ui_MainWidget):
             New button clicked, show edit box.
         """
         # Get item type to add/
-        type_ = str(action.data().toString())
+        type_ = str(action.data())
         self.showEditBox(None, type_)
 
     def slotCancelEdit(self):

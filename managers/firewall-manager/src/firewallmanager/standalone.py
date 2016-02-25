@@ -22,7 +22,7 @@ class Module(KCModule):
         KGlobal.locale().insertCatalog(catalog)
 
         if not dbus.get_default_main_loop():
-            from dbus.mainloop.qt import DBusQtMainLoop
+            from dbus.mainloop.pyqt5 import DBusQtMainLoop
             DBusQtMainLoop(set_as_default=True)
 
         MainWidget(self, embed=True)

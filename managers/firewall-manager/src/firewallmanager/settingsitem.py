@@ -14,17 +14,18 @@
 #
 
 # PyQt
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtWidgets  import *
 from context import *
-from PyQt4.QtCore import SIGNAL
+from PyQt5.QtCore import pyqtSignal
 # UI
 from firewallmanager.ui_settingsitem import Ui_SettingsItemWidget
 
 
-class SettingsItemWidget(QtGui.QWidget, Ui_SettingsItemWidget):
+class SettingsItemWidget(QtWidgets.QWidget, Ui_SettingsItemWidget):
     def __init__(self, parent, name, type_):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
 
         self.name = name
@@ -41,12 +42,12 @@ class SettingsItemWidget(QtGui.QWidget, Ui_SettingsItemWidget):
         elif type_ == "text":
             self.lineItem.show()
 
-        self.connect(self.pushAdd, QtCore.SIGNAL("clicked()"), self.addItemToList)
-        self.connect(self.pushDelete, QtCore.SIGNAL("clicked()"), self.removeItemToList)
-        self.connect(self.pushUp, QtCore.SIGNAL("clicked()"), self.funcpushUp)
-        self.connect(self.pushDown, QtCore.SIGNAL("clicked()"), self.funcpushDown)
-        QtCore.QObject.connect(self.listWidget, QtCore.SIGNAL(("currentItemChanged(QListWidgetItem*,QListWidgetItem*)")), self.HideButtons)
-        QtCore.QObject.connect(self.lineEdit, QtCore.SIGNAL(("textChanged(QString)")), self.hideAdd)
+        self.pushAdd.clicked.connect(self.addItemToList)
+        self.pushDelete.clicked.connect(self.removeItemToList)
+        self.pushUp.clicked.connect(self.funcpushUp)
+        self.pushDown.clicked.connect(self.funcpushDown)
+        self.listWidget.currentItemChanged[QListWidgetItem,QListWidgetItem].connect(self.HideButtons)
+        self.lineEdit.textChanged[str].connect(self.hideAdd)
         self.pushAdd.setIcon(KIcon("list-add"))
         self.pushDelete.setIcon(KIcon("list-remove"))
         self.pushUp.setIcon(KIcon("arrow-up"))
@@ -164,7 +165,7 @@ class SettingsItemWidget(QtGui.QWidget, Ui_SettingsItemWidget):
     def getValue(self):
         if self.type == "combo":
             index = self.comboItems.currentIndex()
-            return unicode(self.comboItems.itemData(index).toString())
+            return unicode(self.comboItems.itemData(index))
         elif self.type == "editlist":
             items = []
             for index in range(self.listWidget.count()):

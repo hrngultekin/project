@@ -5,7 +5,7 @@ import pds
 import traceback
 from time import time
 from pds.qiconloader import QIconLoader
-from PyQt4.QtGui import QMessageBox
+from PyQt5.QtWidgets import QMessageBox
 from context import *
 
 Pds = pds.Pds('firewall-manager', debug = True)
@@ -32,5 +32,5 @@ def _time():
 def createMessage(self,errorTitle, errorMessage):
     errorTitle = i18n(errorTitle)
     errorMessage= i18n(errorMessage)
-    self.messageBox = QMessageBox(errorTitle, errorMessage, QMessageBox.Critical, QMessageBox.Ok, 0, 0)
+    self.messageBox = QMessageBox(QMessageBox.Critical, errorTitle, errorMessage, QMessageBox.Ok, None)
     self.messageBox.show()

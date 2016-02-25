@@ -892,7 +892,7 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/context.py managers/firew
 +import traceback
 +from time import time
 +from pds.qiconloader import QIconLoader
-+from PyQt4.QtGui import QMessageBox
++from PyQt5.QtWidgets import QMessageBox
 +from context import *
 +
 +Pds = pds.Pds('firewall-manager', debug = True)
@@ -925,8 +925,8 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/edit.py managers/firewall
 --- firewall-manager-3.0.0//src/firewallmanager/edit.py	2010-07-06 14:16:34.000000000 +0300
 +++ managers/firewall-manager//src/firewallmanager/edit.py	2011-03-29 16:03:27.702000000 +0300
 @@ -15,6 +15,3 @@
- from PyQt4 import QtCore
- from PyQt4 import QtGui
+ from PyQt5 import QtCore
+ from PyQt5 import QtGui
  
 -# PyKDE
 -from PyKDE4 import kdeui
@@ -935,7 +935,7 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/item.py managers/firewall
 --- firewall-manager-3.0.0//src/firewallmanager/item.py	2010-07-06 14:16:34.000000000 +0300
 +++ managers/firewall-manager//src/firewallmanager/item.py	2011-03-29 16:03:27.700000000 +0300
 @@ -16,7 +16,7 @@
- from PyQt4 import QtGui
+ from PyQt5 import QtGui
  
  # PyKDE
 -from PyKDE4.kdeui import KIcon
@@ -948,8 +948,8 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/main.py managers/firewall
 +++ managers/firewall-manager//src/firewallmanager/main.py	2011-03-29 16:03:27.701000000 +0300
 @@ -14,11 +14,6 @@
  # PyQt
- from PyQt4 import QtCore
- from PyQt4 import QtGui
+ from PyQt5 import QtCore
+ from PyQt5 import QtGui
 -
 -# PyKDE
 -from PyKDE4 import kdeui
@@ -1044,8 +1044,8 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/pagedialog.py managers/fi
 --- firewall-manager-3.0.0//src/firewallmanager/pagedialog.py	2010-07-06 14:16:34.000000000 +0300
 +++ managers/firewall-manager//src/firewallmanager/pagedialog.py	2011-03-29 16:03:27.699000000 +0300
 @@ -15,30 +15,77 @@
- from PyQt4 import QtCore
- from PyQt4 import QtGui
+ from PyQt5 import QtCore
+ from PyQt5 import QtGui
  
 -# PyKDE
 -from PyKDE4 import kdeui
@@ -1147,8 +1147,8 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/service.py managers/firew
 --- firewall-manager-3.0.0//src/firewallmanager/service.py	2010-07-06 14:16:34.000000000 +0300
 +++ managers/firewall-manager//src/firewallmanager/service.py	2011-03-29 16:03:27.701000000 +0300
 @@ -15,10 +15,8 @@
- from PyQt4 import QtCore
- from PyQt4 import QtGui
+ from PyQt5 import QtCore
+ from PyQt5 import QtGui
  
 -# PyKDE
 -from PyKDE4 import kdeui
@@ -1194,14 +1194,14 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/settingsitem.py managers/
  #
 @@ -14,10 +16,8 @@
  # PyQt
- from PyQt4 import QtCore
- from PyQt4 import QtGui
+ from PyQt5 import QtCore
+ from PyQt5 import QtGui
 -
 -# PyKDE
 -#from PyKDE4.kdeui import KIcon
 -
 +from context import *
-+from PyQt4.QtCore import SIGNAL
++from PyQt5.QtCore import SIGNAL
  # UI
  from firewallmanager.ui_settingsitem import Ui_SettingsItemWidget
  
@@ -1333,7 +1333,7 @@ diff -Nuar firewall-manager-3.0.0//src/firewallmanager/settingsitem.py managers/
              self.lineItem.setText(unicode(value))
  
 @@ -74,8 +167,9 @@
-             return unicode(self.comboItems.itemData(index).toString())
+             return unicode(self.comboItems.itemData(index))
          elif self.type == "editlist":
              items = []
 -            for index in range(self.listItems.count()):
@@ -1389,8 +1389,8 @@ diff -Nuar firewall-manager-3.0.0//src/firewall-manager.py managers/firewall-man
  import sys
  import dbus
  
--from PyQt4 import QtGui
--from PyQt4 import QtCore
+-from PyQt5 import QtGui
+-from PyQt5 import QtCore
 -
 -from PyKDE4.kdeui import KMainWindow, KApplication, KCModule, KIcon
 -from PyKDE4.kdecore import KCmdLineArgs, KGlobal
@@ -1402,9 +1402,9 @@ diff -Nuar firewall-manager-3.0.0//src/firewall-manager.py managers/firewall-man
 +#Qt
  
 -class MainWindow(KMainWindow):
-+from PyQt4 import QtGui
-+from PyQt4 import QtCore
-+from PyQt4.QtCore import *
++from PyQt5 import QtGui
++from PyQt5 import QtCore
++from PyQt5.QtCore import *
 +class MainWindow(QtGui.QMainWindow):
      def __init__(self, parent=None):
 -        KMainWindow.__init__(self, parent)

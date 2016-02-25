@@ -57,7 +57,7 @@ def update_messages():
         if FOR_KDE_4:
             os.system("pykde4uic -o ui/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
         else:
-            os.system("pyuic4 -o ui/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
+            os.system("py2uic5 -o ui/ui_%s.py ui/%s" % (filename.split(".")[0], filename))#, PROJECT))
 
     # Collect headers for desktop files
     for filename in glob.glob("data/*.desktop.in"):
@@ -112,11 +112,11 @@ class Build(build):
             if FOR_KDE_4:
                 os.system("pykde4uic -o build/firewallmanager/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
             else:
-                os.system("pyuic4 -o build/firewallmanager/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
+                os.system("py2uic5 -o build/firewallmanager/ui_%s.py ui/%s" % (filename.split(".")[0], filename))#, PROJECT))
 
         print "Generating RCs..."
         for filename in glob.glob1("data", "*.qrc"):
-            os.system("pyrcc4 data/%s -o build/%s_rc.py" % (filename, filename.split(".")[0]))
+            os.system("py2rcc5 data/%s -o build/%s_rc.py" % (filename, filename.split(".")[0]))
 
 class Install(install):
     def run(self):

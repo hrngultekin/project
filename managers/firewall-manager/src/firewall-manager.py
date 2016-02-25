@@ -21,12 +21,12 @@ from firewallmanager.context import *
 
 #Qt
 
-from PyQt4 import QtGui
-from PyQt4 import QtCore
-from PyQt4.QtCore import *
-class MainWindow(QtGui.QMainWindow):
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
+from PyQt5.QtCore import *
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
-        QtGui.QMainWindow.__init__(self, parent)
+        QtWidgets.QMainWindow.__init__(self, parent)
         widget = MainWidget(self)
         self.resize(widget.size())
         self.setCentralWidget(widget)
@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
 
     if not dbus.get_default_main_loop():
-        from dbus.mainloop.qt import DBusQtMainLoop
+        from dbus.mainloop.pyqt5 import DBusQtMainLoop
         DBusQtMainLoop(set_as_default=True)
 
     if ctx.Pds.session == ctx.pds.Kde4:
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         mainWindow.resize(640, 480)
         mainWindow.setWindowTitle(i18n("Firewall Manager"))
         mainWindow.setWindowIcon(KIcon("security-high"))
-        app.connect(app, SIGNAL('lastWindowClosed()'), app.quit)
+        app.lastWindowClosed.connect(app.quit)
         app.exec_()
 
 def CreatePlugin(widget_parent, parent, component_data):

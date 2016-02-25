@@ -12,8 +12,8 @@
 #
 
 # PyQt
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
 
 #Context
 from context import *
@@ -21,14 +21,15 @@ from context import *
 from firewallmanager.ui_service import Ui_ServiceWidget
 
 
-class ServiceWidget(QtGui.QWidget, Ui_ServiceWidget):
+class ServiceWidget(QtWidgets.QWidget, Ui_ServiceWidget):
+    stateChanged = QtCore.pyqtSignal([int])
     def __init__(self, parent):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.state = False
 
         # Signals
-        self.connect(self.pushToggle, QtCore.SIGNAL("clicked()"), lambda: self.emit(QtCore.SIGNAL("stateChanged(int)"), not self.getState()))
+        self.pushToggle.clicked.connect(lambda: self.stateChanged[int].emit(not self.getState()))
 
     def setState(self, state):
         self.state = state

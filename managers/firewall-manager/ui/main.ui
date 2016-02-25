@@ -97,8 +97,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>526</width>
-           <height>189</height>
+           <width>522</width>
+           <height>165</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -110,6 +110,7 @@
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
+            <layout class="QGridLayout" name="gridLayout_4"/>
            </widget>
           </item>
          </layout>

@@ -12,8 +12,8 @@
 #
 
 # PyQt
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
 
 # Settings item widget
 from firewallmanager.settingsitem import SettingsItemWidget
@@ -49,24 +49,24 @@ if ctx.Pds.session == ctx.pds.Kde4:
 
 else :
 
-    class PageDialog(QtGui.QDialog):
+    class PageDialog(QtWidgets.QDialog):
         def __init__(self, parent, parameters, savedParameters):
             self.animationLast = ANIM_HIDE
-            QtGui.QDialog.__init__(self,parent)
+            QtWidgets.QDialog.__init__(self,parent)
             self.setWindowTitle(i18n("Settings"))
             self.resize(548,180)
             self.page_widget = PageWidget(self, parameters,savedParameters)
-            self.tab=QtGui.QTabWidget(self)
+            self.tab=QtWidgets.QTabWidget(self)
             self.tab.addTab(self.page_widget,i18n("Settings"))
-            self.buttonBox = QtGui.QDialogButtonBox(self)
+            self.buttonBox = QtWidgets.QDialogButtonBox(self)
             self.buttonBox.setGeometry(QtCore.QRect(4, 152, 540, 25))
-            self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
-            self.layout=QtGui.QVBoxLayout(self)
+            self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+            self.layout=QtWidgets.QVBoxLayout(self)
             self.layout.addWidget(self.tab)
             self.layout.addWidget(self.buttonBox)
             self.buttonBox.setObjectName(i18n("buttonBox"))
-            QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(i18n("accepted()")), self.accept)
-            QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(i18n("rejected()")),self.reject)
+            self.buttonBox.accepted.connect(self.accept)                     #çeviri hatası alabilirim
+            self.buttonBox.rejected.connect(self.reject)                    #çeviri hatası alabilirim
             QtCore.QMetaObject.connectSlotsByName(self)
 
         def getValues(self):
@@ -87,10 +87,10 @@ else :
             # Hide edit box
             self.hideEditBox()
 
-class PageWidget(QtGui.QWidget):
+class PageWidget(QtWidgets.QWidget):
     def __init__(self, parent, parameters=[], saved={}):
-        QtGui.QWidget.__init__(self, parent)
-        layout = QtGui.QVBoxLayout(self)
+        QtWidgets.QWidget.__init__(self, parent)
+        layout = QtWidgets.QVBoxLayout(self)
         self.widgets = {}
         for name, label, type_, options in parameters:
             widget = SettingsItemWidget(self, name, type_)
@@ -101,7 +101,7 @@ class PageWidget(QtGui.QWidget):
             self.widgets[name] = widget
             layout.addWidget(widget)
 
-        self.item = QtGui.QSpacerItem(10, 10, QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Expanding)
+        self.item = QtWidgets.QSpacerItem(10, 10, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         layout.addSpacerItem(self.item)
 
     def getValues(self):
