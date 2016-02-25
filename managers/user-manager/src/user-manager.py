@@ -66,7 +66,7 @@ if __name__ == "__main__":
         app=QUniqueApplication(sys.argv, catalog='user-manager')
         window=MainWindow()
         window.show()
-        window.resize(680,500)
+        window.resize(680,550)
         window.setWindowTitle(i18n('User Manager'))
         window.setWindowIcon(KIcon('computer'))
         app.exec_()

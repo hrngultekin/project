@@ -1,0 +1,14 @@
+qwidget arguman hatası alıyorum
+
+    Hata olabilecek yeler
+________________________________
+
+SIGNAL 
+#################
+
+-> mainwidget           --->1 kaldı
+-> basketdialog         --->4 kaldı
+
+Emits
+#################
+-> settingsdialog       ---> emitlere dikkat
