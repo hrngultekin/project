@@ -12,8 +12,8 @@
 #
 
 # PyQt
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
 
 # UI
 from usermanager.ui_question import Ui_DialogQuestion
@@ -22,9 +22,9 @@ from usermanager.ui_question import Ui_DialogQuestion
 
 from context import *
 
-class DialogQuestion(QtGui.QDialog, Ui_DialogQuestion):
+class DialogQuestion(QtWidgets.QDialog, Ui_DialogQuestion):
     def __init__(self, parent):
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.setupUi(self)
 
         self.pixmapIcon.setPixmap(KIcon("dialog-information").pixmap(48, 48))

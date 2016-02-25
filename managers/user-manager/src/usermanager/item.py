@@ -12,8 +12,8 @@
 #
 
 # PyQt
-from PyQt4 import QtCore
-from PyQt4 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
 
 import context as ctx
 if ctx.Pds.session==ctx.pds.Kde4:
@@ -27,9 +27,9 @@ else:
 from usermanager.ui_item import Ui_ItemWidget
 
 
-class ItemListWidgetItem(QtGui.QListWidgetItem):
+class ItemListWidgetItem(QtWidgets.QListWidgetItem):
     def __init__(self, parent, widget):
-        QtGui.QListWidgetItem.__init__(self, parent)
+        QtWidgets.QListWidgetItem.__init__(self, parent)
         self.widget = widget
         self.setSizeHint(QtCore.QSize(300, 48))
 
@@ -40,9 +40,14 @@ class ItemListWidgetItem(QtGui.QListWidgetItem):
         return self.widget.getType()
 
 
-class ItemWidget(QtGui.QWidget, Ui_ItemWidget):
+class ItemWidget(QtWidgets.QWidget, Ui_ItemWidget):
+    # Created Signals
+    stateChanged = QtCore.pyqtSignal([int])
+    editClicked = QtCore.pyqtSignal()
+    deleteClicked = QtCore.pyqtSignal()
+    
     def __init__(self, parent, id_, title="", description="", type_=None, icon=None, state=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
 
         self.id = id_
@@ -65,9 +70,9 @@ class ItemWidget(QtGui.QWidget, Ui_ItemWidget):
         self.pushDelete.setIcon(KIcon("edit-delete"))
 
         # Signals
-        self.connect(self.checkState, QtCore.SIGNAL("stateChanged(int)"), lambda: self.emit(QtCore.SIGNAL("stateChanged(int)"), self.checkState.checkState()))
-        self.connect(self.pushEdit, QtCore.SIGNAL("clicked()"), lambda: self.emit(QtCore.SIGNAL("editClicked()")))
-        self.connect(self.pushDelete, QtCore.SIGNAL("clicked()"), lambda: self.emit(QtCore.SIGNAL("deleteClicked()")))
+        self.checkState.stateChanged[int].connect(lambda: self.stateChanged[int].emit(self.checkState.checkState()))
+        self.pushEdit.clicked.connect(lambda: self.editClicked.emit())
+        self.pushDelete.clicked.connect(lambda: self.deleteClicked.emit())
 
     def mouseDoubleClickEvent(self, event):
         self.pushEdit.animateClick(100)

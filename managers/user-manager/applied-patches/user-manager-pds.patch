@@ -5682,7 +5682,7 @@ diff -Nuar user-manager-3.0.2/setup.py managers/user-manager//setup.py
 +        if FOR_KDE_4:
 +            os.system("pykde4uic -o ui/ui_%s.py ui/%s -g &s" % (filename.split(".")[0], filename, PROJECT))
 +        else:
-+            os.system("pyuic4 -o ui/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
++            os.system("py2uic5 -o ui/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
  
      # Collect headers for desktop files
      for filename in glob.glob("data/*.desktop.in"):
@@ -5694,7 +5694,7 @@ diff -Nuar user-manager-3.0.2/setup.py managers/user-manager//setup.py
 +            if FOR_KDE_4:
 +                os.system("pykde4uic -o build/usermanager/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
 +            else:
-+                os.system("pyuic4 -o build/usermanager/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
++                os.system("py2uic5 -o build/usermanager/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
  
          print "Generating RCs..."
          for filename in glob.glob1("data", "*.qrc"):
@@ -5866,10 +5866,10 @@ diff -Nuar user-manager-3.0.2/src/usermanager/edit.py managers/user-manager//src
 +++ managers/user-manager//src/usermanager/edit.py	2011-03-29 16:03:24.507000000 +0300
 @@ -17,11 +17,11 @@
  # PyQt
- from PyQt4 import QtCore
- from PyQt4 import QtGui
-+from PyQt4.QtGui import QMessageBox
-+from PyQt4.QtGui import QLineEdit
+ from PyQt5 import QtCore
+ from PyQt5 import PyQt5
++from PyQt5.PyQt5 import QMessageBox
++from PyQt5.PyQt5 import QLineEdit
  
 -# PyKDE
 -from PyKDE4 import kdeui
@@ -5946,7 +5946,7 @@ diff -Nuar user-manager-3.0.2/src/usermanager/edit.py managers/user-manager//src
          # do not show policies require policy type yes or no, only the ones require auth_* type
          allActions = filter(lambda x: polkit.action_info(x)['policy_active'].startswith("auth_"),polkit.action_list())
          for _category in categories.keys():
-             parent_item = QtGui.QTreeWidgetItem(self.treeAuthorizations)
+             parent_item = PyQt5.QTreeWidgetItem(self.treeAuthorizations)
 -            parent_item.setIcon(0, kdeui.KIcon(categories[_category][1]))
 +            parent_item.setIcon(0,KIcon(categories[_category][1]))
              parent_item.setText(0, unicode(categories[_category][0]))
@@ -5986,14 +5986,14 @@ diff -Nuar user-manager-3.0.2/src/usermanager/edit.py managers/user-manager//src
 +               else:
 +                   self.treeAuthorizations.topLevelItem(i).setHidden(True)
  
- class EditGroupWidget(QtGui.QWidget, Ui_EditGroupWidget):
+ class EditGroupWidget(PyQt5.QWidget, Ui_EditGroupWidget):
      def __init__(self, parent):
 diff -Nuar user-manager-3.0.2/src/usermanager/item.py managers/user-manager//src/usermanager/item.py
 --- user-manager-3.0.2/src/usermanager/item.py	2010-07-06 14:16:21.000000000 +0300
 +++ managers/user-manager//src/usermanager/item.py	2011-03-29 16:03:24.505000000 +0300
 @@ -15,8 +15,13 @@
- from PyQt4 import QtCore
- from PyQt4 import QtGui
+ from PyQt5 import QtCore
+ from PyQt5 import PyQt5
  
 -# PyKDE
 -from PyKDE4.kdeui import KIcon
@@ -6012,9 +6012,9 @@ diff -Nuar user-manager-3.0.2/src/usermanager/main.py managers/user-manager//src
 +++ managers/user-manager//src/usermanager/main.py	2011-03-29 16:03:24.507000000 +0300
 @@ -16,10 +16,12 @@
  # PyQt
- from PyQt4 import QtCore
- from PyQt4 import QtGui
-+from PyQt4.QtGui import QMessageBox,QIcon
+ from PyQt5 import QtCore
+ from PyQt5 import PyQt5
++from PyQt5.QtGui import QMessageBox,QIcon
  
  # PyKDE
 -from PyKDE4 import kdeui
@@ -6187,8 +6187,8 @@ diff -Nuar user-manager-3.0.2/src/usermanager/question.py managers/user-manager/
 --- user-manager-3.0.2/src/usermanager/question.py	2010-07-06 14:16:21.000000000 +0300
 +++ managers/user-manager//src/usermanager/question.py	2011-03-29 16:03:24.507000000 +0300
 @@ -15,19 +15,19 @@
- from PyQt4 import QtCore
- from PyQt4 import QtGui
+ from PyQt5 import QtCore
+ from PyQt5 import QtGui
  
 -# PyKDE
 -from PyKDE4 import kdeui
@@ -6215,8 +6215,8 @@ diff -Nuar user-manager-3.0.2/src/user-manager.py managers/user-manager//src/use
 --- user-manager-3.0.2/src/user-manager.py	2010-07-06 14:16:21.000000000 +0300
 +++ managers/user-manager//src/user-manager.py	2011-03-29 16:03:24.566000000 +0300
 @@ -17,38 +17,62 @@
- from PyQt4 import QtGui
- from PyQt4 import QtCore
+ from PyQt5 import QtGui
+ from PyQt5 import QtCore
  
 -from PyKDE4.kdeui import KMainWindow, KApplication, KCModule, KIcon
 -from PyKDE4.kdecore import KCmdLineArgs, KGlobal

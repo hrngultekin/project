@@ -15,10 +15,10 @@
 import os
 
 # PyQt
-from PyQt4 import QtCore
-from PyQt4 import QtGui
-from PyQt4.QtGui import QMessageBox
-from PyQt4.QtGui import QLineEdit
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import *
+#from PyQt5.QtWidgets import QLineEdit
 
 #PDS
 from context import *
@@ -33,9 +33,9 @@ from usermanager.utility import nickGuess
 # PolicyKit
 import polkit
 
-class PolicyItem(QtGui.QTreeWidgetItem):
+class PolicyItem(QtWidgets.QTreeWidgetItem):
     def __init__(self, parent, text, action_id):
-        QtGui.QTreeWidgetItem.__init__(self, parent)
+        QtWidgets.QTreeWidgetItem.__init__(self, parent)
         self.action_id = action_id
         self.type = 0
         self.setText(0, text)
@@ -57,9 +57,14 @@ class PolicyItem(QtGui.QTreeWidgetItem):
         return self.type
 
 
-class EditUserWidget(QtGui.QWidget, Ui_EditUserWidget):
+class EditUserWidget(QtWidgets.QWidget, Ui_EditUserWidget):
+    #Signals
+    buttonStatusChanged = QtCore.pyqtSignal([int])
+    #stateChanged = QtCore.pyqtSignal([int])
+    #textEdited = QtCore.pyqtSignal([str])
+    
     def __init__(self, parent):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
 
         # List of unavailable nicks
@@ -76,22 +81,22 @@ class EditUserWidget(QtGui.QWidget, Ui_EditUserWidget):
         self.labelSign.hide()
 
         # Signals
-        self.connect(self.checkAutoId, QtCore.SIGNAL("stateChanged(int)"), self.slotCheckAuto)
-        self.connect(self.lineUsername, QtCore.SIGNAL("textEdited(const QString&)"), self.slotUsernameChanged)
-        self.connect(self.lineFullname, QtCore.SIGNAL("textEdited(const QString&)"), self.slotFullnameChanged)
-        self.connect(self.listGroups, QtCore.SIGNAL("itemClicked(QListWidgetItem*)"), self.slotGroupSelected)
-        self.connect(self.treeAuthorizations, QtCore.SIGNAL("currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)"), self.slotPolicySelected)
-        self.connect(self.radioAuthNo, QtCore.SIGNAL("toggled(bool)"), self.slotPolicyChanged)
-        self.connect(self.radioAuthDefault, QtCore.SIGNAL("toggled(bool)"), self.slotPolicyChanged)
-        self.connect(self.radioAuthYes, QtCore.SIGNAL("toggled(bool)"), self.slotPolicyChanged)
-        self.connect(self.checkAdmin, QtCore.SIGNAL("stateChanged(int)"), self.slotAdmin)
-        self.connect(self.pushAuth, QtCore.SIGNAL("clicked()"), self.slotAuth)
+        self.checkAutoId.stateChanged[int].connect(self.slotCheckAuto)
+        self.lineUsername.textEdited[str].connect(self.slotUsernameChanged)
+        self.lineFullname.textEdited[str].connect(self.slotFullnameChanged)
+        self.listGroups.itemClicked[QListWidgetItem].connect(self.slotGroupSelected)
+        self.treeAuthorizations.currentItemChanged[QTreeWidgetItem, QTreeWidgetItem].connect(self.slotPolicySelected)
+        self.radioAuthNo.toggled[bool].connect(self.slotPolicyChanged)
+        self.radioAuthDefault.toggled[bool].connect(self.slotPolicyChanged)
+        self.radioAuthYes.toggled[bool].connect(self.slotPolicyChanged)
+        self.checkAdmin.stateChanged[int].connect(self.slotAdmin)
+        self.pushAuth.clicked.connect(self.slotAuth)
 
-        self.connect(self.lineFullname, QtCore.SIGNAL("textEdited(const QString&)"), self.checkFields)
-        self.connect(self.linePassword, QtCore.SIGNAL("textEdited(const QString&)"), self.checkFields)
-        self.connect(self.linePasswordAgain, QtCore.SIGNAL("textEdited(const QString&)"), self.checkFields)
-        self.connect(self.lineUsername, QtCore.SIGNAL("textEdited(const QString&)"), self.checkFields)
-        self.connect(self.lineHomeDir, QtCore.SIGNAL("textEdited(const QString&)"), self.checkFields)
+        self.lineFullname.textEdited[str].connect(self.checkFields)
+        self.linePassword.textEdited[str].connect(self.checkFields)
+        self.linePasswordAgain.textEdited[str].connect(self.checkFields)
+        self.lineUsername.textEdited[str].connect(self.checkFields)
+        self.lineHomeDir.textEdited[str].connect(self.checkFields)
 
         #self.filterAuthorizations.setTreeWidget(self.treeAuthorizations)
         #self.filterGroups.setListWidget(self.listGroups)
@@ -115,7 +120,7 @@ class EditUserWidget(QtGui.QWidget, Ui_EditUserWidget):
         self.advancedGroup.hide()
         self.comboShell.clear()
         self.comboShell.addItems(self.available_shells)
-        self.emit(QtCore.SIGNAL("buttonStatusChanged(int)"),1)
+        self.buttonStatusChanged[int].emit(1)
         for index in xrange(self.treeAuthorizations.topLevelItemCount()):
             self.treeAuthorizations.collapseItem(self.treeAuthorizations.topLevelItem(index))
 
@@ -133,7 +138,7 @@ class EditUserWidget(QtGui.QWidget, Ui_EditUserWidget):
         # do not show policies require policy type yes or no, only the ones require auth_* type
         allActions = filter(lambda x: polkit.action_info(x)['policy_active'].startswith("auth_"),polkit.action_list())
         for _category in categories.keys():
-            parent_item = QtGui.QTreeWidgetItem(self.treeAuthorizations)
+            parent_item = QtWidgets.QTreeWidgetItem(self.treeAuthorizations)
             parent_item.setIcon(0,KIcon(categories[_category][1]))
             parent_item.setText(0, unicode(categories[_category][0]))
             for category in _category.split('|'):
@@ -227,7 +232,7 @@ class EditUserWidget(QtGui.QWidget, Ui_EditUserWidget):
         self.comboMainGroup.clear()
         for group in all_groups:
             # Groups
-            item = QtGui.QListWidgetItem(self.listGroups)
+            item = QtWidgets.QListWidgetItem(self.listGroups)
             item.setText(group)
             if group in selected_groups:
                 item.setCheckState(QtCore.Qt.Checked)
@@ -411,11 +416,11 @@ class EditUserWidget(QtGui.QWidget, Ui_EditUserWidget):
         if err:
             self.labelWarning.setText(u"<font color=red>%s</font>" % err)
             self.labelSign.show()
-            self.emit(QtCore.SIGNAL("buttonStatusChanged(int)"),0)
+            self.buttonStatusChanged[int].emit(0)
         else:
             self.labelWarning.setText("")
             self.labelSign.hide()
-            self.emit(QtCore.SIGNAL("buttonStatusChanged(int)"),1)
+            self.buttonStatusChanged[int].emit(1)
     def searchListWidget(self):
         srcList=self.filtergroups.text()
         for i in range(self.listGroups.count()):
@@ -437,16 +442,17 @@ class EditUserWidget(QtGui.QWidget, Ui_EditUserWidget):
                else:
                    self.treeAuthorizations.topLevelItem(i).setHidden(True)
 
-class EditGroupWidget(QtGui.QWidget, Ui_EditGroupWidget):
+class EditGroupWidget(QtWidgets.QWidget, Ui_EditGroupWidget):
+    buttonStatusChanged = QtCore.pyqtSignal([int])
     def __init__(self, parent):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
 
-        self.connect(self.checkAutoId, QtCore.SIGNAL("stateChanged(int)"), self.slotCheckAuto)
-        self.connect(self.lineGroupname, QtCore.SIGNAL("textEdited(const QString&)"), self.slotGroupnameChanged)
+        self.checkAutoId.stateChanged[int].connect(self.slotCheckAuto)          #burada hata olabilir bağlantı kaynaklı
+        self.lineGroupname.textEdited[str].connect(self.slotGroupnameChanged)
 
     def slotGroupnameChanged(self, name):
-        self.emit(QtCore.SIGNAL("buttonStatusChanged(int)"),1)
+        self.buttonStatusChanged[int].emit(1)
 
     def reset(self):
         self.setId(-1)

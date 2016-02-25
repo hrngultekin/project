@@ -14,8 +14,8 @@
 import sys
 import dbus
 
-from PyQt4 import QtGui
-from PyQt4 import QtCore
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 
 from usermanager.about import *
 from usermanager.main import MainWidget
@@ -26,9 +26,9 @@ import usermanager.context as ctx
 from usermanager.context import *
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
-        QtGui.QMainWindow.__init__(self,parent)
+        QtWidgets.QMainWindow.__init__(self,parent)
         widget = MainWidget(self)
         self.resize(widget.size())
         self.setCentralWidget(widget)
@@ -38,7 +38,7 @@ if __name__ == "__main__":
    
     #DBUS MainLoop
     if not dbus.get_default_main_loop():
-        from dbus.mainloop.qt import DBusQtMainLoop
+        from dbus.mainloop.pyqt5 import DBusQtMainLoop
         DBusQtMainLoop(set_as_default = True)
 
     if ctx.Pds.session==ctx.pds.Kde4:
