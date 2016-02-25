@@ -167,8 +167,8 @@ diff -Nuar service-manager-3.0.0.orig//src/servicemanager/base.py service-manage
 --- service-manager-3.0.0.orig//src/servicemanager/base.py	2011-03-21 11:09:29.712000015 +0200
 +++ service-manager-3.0.0/src/servicemanager/base.py	2011-03-21 11:10:08.157000017 +0200
 @@ -20,16 +20,18 @@
- from PyQt4.QtGui import QMessageBox
- from PyQt4.QtCore import *
+ from PyQt5.QtWidgets import QMessageBox
+ from PyQt5.QtCore import *
  
 -# PyKDE4 Stuff
 -from PyKDE4.kdeui import *
@@ -187,9 +187,9 @@ diff -Nuar service-manager-3.0.0.orig//src/servicemanager/base.py service-manage
 +else:
 +    from servicemanager.context import i18n
 +
- class MainManager(QtGui.QWidget):
+ class MainManager(QtWidgets.QWidget):
      def __init__(self, parent, standAlone=True):
-         QtGui.QWidget.__init__(self, parent)
+         QtWidgets.QWidget.__init__(self, parent)
 diff -Nuar service-manager-3.0.0.orig//src/servicemanager/context.py service-manager-3.0.0/src/servicemanager/context.py
 --- service-manager-3.0.0.orig//src/servicemanager/context.py	1970-01-01 02:00:00.000000000 +0200
 +++ service-manager-3.0.0/src/servicemanager/context.py	2011-03-21 11:10:08.161000017 +0200
@@ -227,8 +227,8 @@ diff -Nuar service-manager-3.0.0.orig//src/servicemanager/widgets.py service-man
 --- service-manager-3.0.0.orig//src/servicemanager/widgets.py	2011-03-21 11:09:29.712000015 +0200
 +++ service-manager-3.0.0/src/servicemanager/widgets.py	2011-03-21 11:10:08.163000017 +0200
 @@ -15,10 +15,13 @@
- from PyQt4 import QtGui
- from PyQt4.QtCore import *
+ from PyQt5 import QtWidgets
+ from PyQt5.QtCore import *
  
 -# KDE Stuff
 -from PyKDE4 import kdeui
@@ -311,7 +311,7 @@ diff -Nuar service-manager-3.0.0.orig//src/service-manager.py service-manager-3.
 +import servicemanager.about as about
 +
  # Qt Stuff
- from PyQt4.QtCore import SIGNAL
+ from PyQt5.QtCore import SIGNAL
  
 -# PyKDE4 Stuff
 -from PyKDE4.kdeui import *
@@ -389,7 +389,7 @@ diff -Nuar service-manager-3.0.0.orig//src/service-manager.py service-manager-3.
 +        mainWindow.setWindowIcon(KIcon(about.icon))
  
      # Create connection for lastWindowClosed signal to quit app
-     app.connect(app, SIGNAL('lastWindowClosed()'), app.quit)
+     app.lastWindowClosed.connect(app.quit)
  
 -    # Run the application
 +    # Run the applications

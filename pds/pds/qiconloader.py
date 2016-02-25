@@ -72,8 +72,8 @@ class QIconLoader:
 
         self.themeName = self.pds.settings(self.pds.session.IconKey, \
                                            self.pds.session.DefaultIconTheme)
-        print "themeName:",self.themeName
-        # Define icon directories
+        
+        
         self.iconDirs =  filter(lambda x: path.exists(x),
                 map(lambda x: path.join(unicode(x), 'icons'),
                     dataDirs.split(':')))
@@ -103,15 +103,15 @@ class QIconLoader:
                 for key in indexReader.allKeys():
                     if str(key).endswith("/Size"):
                         size = str(indexReader.value(key))
-                        #print key
+                        
                         dirList.append((size, 
                             unicode(key[:-5])))
-                #print dirList
+                
                 parents = indexReader.value('Icon Theme/Inherits')
                 dump=parents
                 parents = list()
                 parents.append(dump)
-                #print type(parents),parents
+                
                 break
         return QIconTheme(dirList, parents)
 
@@ -137,14 +137,14 @@ class QIconLoader:
                             _path[1],'*.png')))
                         icons.extend(glob(path.join(iconDir, theme, 
                             _path[1],'*.svg')))
-                        #print icons
-        #print "icons:",icons
+                        
+        
         for iconDir in self.extraIcons:
             if path.exists(iconDir):
                 icons.extend(glob(path.join(iconDir, '*.png')))
 
         _icons = map(lambda a: a.split('/')[-1][:-4], icons)
-        #print _icons
+        
         return list(set(_icons))
 
     def findIconHelper(self, size = int, themeName = str, iconName = str):
@@ -161,15 +161,15 @@ class QIconLoader:
         else:
             index = self.readThemeIndex(themeName)
 
-        #print index.dirList, size
+        
         subDirs = filter(lambda x:x[0] == str(size), index.dirList)
-        #print "subDirs",subDirs
+        
         for iconDir in self.iconDirs:
             if path.exists(path.join(iconDir, themeName)):
                 for theme in subDirs:
                     fileName = path.join(iconDir, themeName, theme[1],
                             '%s.png' % str(iconName))
-                    #print "fileName", fileName
+        
                     logging.debug('Looking for : %s' % fileName)
                     if path.exists(fileName):
                         pixmap.load(fileName)
@@ -179,7 +179,7 @@ class QIconLoader:
 
         for iconDir in self.extraIcons:
             fileName = path.join(iconDir, '%s.png' % str(iconName))
-            #print "fileName",fileName
+        
             if path.exists(fileName):
                 pixmap.load(fileName)
                 logging.debug('Icon: %s found in %s' % (iconName, iconDir))
@@ -195,18 +195,15 @@ class QIconLoader:
         for _name in name:
             pixmapName = ''.join(('$qt', str(_name), str(size)))
             self.pixmap=QPixmapCache.find(pixmapName)               
-            #print "pixmap:",self.pixmap
+            
             if (self.pixmap):
-                #print "ikon yüklendi."
                 logging.debug('Icon %s returned from cache' % _name)
                 return self.pixmap
         self._themes = []
         if self.themeName:
             self._themes.append(self.themeName)
             for _name in name:
-                #print "_name:" , _name
                 self.pixmap = self.findIconHelper(int(size), self.themeName, _name)
-                #print "pixmap3:", self.pixmap
                 if not self.pixmap.isNull():
                     break
         if self.pixmap.isNull():
@@ -222,7 +219,7 @@ class QIconLoader:
         if not self.pixmap.isNull():
             logging.debug('Icon cached with name: %s ' % pixmapName)
             QPixmapCache.insert(pixmapName, self.pixmap)
-        #print "pixmap4:", self.pixmap, self.pixmap.isNull()
+        
         return self.pixmap
 
     def load(self, name, size = 128, forceCache = False):
@@ -235,7 +232,7 @@ class QIconLoader:
             for _name in name:
                 for _size in self.iconSizes:
                     self.pixmap=QPixmapCache.find('$qt'+str(_name)+str(_size))
-                    print 'pixmap2:', self.pixmap
+                    
                     if (self.pixmap):
                         logging.debug('Icon %s returned from cache' % _name)
                         return self.pixmap

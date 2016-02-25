@@ -21,13 +21,13 @@ from pds.container import PApplicationContainer
 class PMplayer(PApplicationContainer):
     def __init__(self, parent = None):
         PApplicationContainer.__init__(self, parent)
-
+        
         if parent:
             parent.closeEvent = self.closeEvent
 
     def openMedia(self, path):
-        ret = self.start("mpv", ("-wid", str(self.winId()), str(path)))
-	print ret
+        ret = self.start("mpv", (str(path),))
+	
         if ret[0]:
             self.show()
 
@@ -45,6 +45,8 @@ class TestUI(QtWidgets.QWidget):
         self.layout.addWidget(self.mplayer)
 
         self.pushbutton.clicked.connect(self.getMedia)
+        
+        self.setGeometry(self.x(),self.y(),400,200)
 
     def getMedia(self):
 	self.mplayer.openMedia(

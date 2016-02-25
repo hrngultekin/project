@@ -16,9 +16,9 @@ import sys
 import comar
 
 # Qt Stuff
-from PyQt4 import QtGui
-from PyQt4.QtGui import QMessageBox
-from PyQt4.QtCore import *
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import *
 
 # Application Stuff
 from servicemanager.backend import ServiceIface
@@ -27,14 +27,16 @@ from servicemanager.widgets import ServiceItemWidget, ServiceItem
 
 # Pds vs KDE
 import servicemanager.context as ctx
-if ctx.Pds.session == ctx.pds.Kde4:
-    from PyKDE4.kdecore import i18n
+if ctx.Pds.session == ctx.pds.Kde5:
+    #from PyKDE4.kdecore import i18n
+    #pykde yok
+    pass
 else:
     from servicemanager.context import i18n
 
-class MainManager(QtGui.QWidget):
+class MainManager(QtWidgets.QWidget):
     def __init__(self, parent, standAlone=True):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         # Create the ui
         self.ui = Ui_mainManager()
@@ -64,8 +66,8 @@ class MainManager(QtGui.QWidget):
         self.getServices()
 
         # search line, we may use model view for correct filtering
-        self.connect(self.ui.lineSearch, SIGNAL("textChanged(QString)"), self.doSearch)
-        self.connect(self.ui.filterBox, SIGNAL("currentIndexChanged(int)"), self.filterServices)
+        self.ui.lineSearch.textChanged[str].connect(self.doSearch)
+        self.ui.filterBox.currentIndexChanged[int].connect(self.filterServices)
 
     def hiddenListWorkaround(self):
         """

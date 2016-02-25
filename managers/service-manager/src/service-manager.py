@@ -22,7 +22,7 @@ import servicemanager.context as ctx
 import servicemanager.about as about
 
 # Qt Stuff
-from PyQt4.QtCore import SIGNAL
+from PyQt5.QtCore import pyqtSignal
 
 # Enable plugin if session is Kde4
 if ctx.Pds.session == ctx.pds.Kde4:
@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     # DBUS MainLoop
     if not dbus.get_default_main_loop():
-        from dbus.mainloop.qt import DBusQtMainLoop
+        from dbus.mainloop.pyqt5 import DBusQtMainLoop
         DBusQtMainLoop(set_as_default = True)
 
     # Pds vs KDE
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         mainWindow.setWindowIcon(KIcon(about.icon))
 
     # Create connection for lastWindowClosed signal to quit app
-    app.connect(app, SIGNAL('lastWindowClosed()'), app.quit)
+    app.lastWindowClosed.connect(app.quit)
 
     # Run the applications
     app.exec_()

@@ -13,18 +13,31 @@
 # any later version.
 
 # Qt Libraries
-from PyQt4 import Qt
+from PyQt5 import Qt
 
-class PApplicationContainer(Qt.QX11EmbedContainer):
+class PApplicationContainer(Qt.QWidget):
+    clientClosed=Qt.pyqtSignal()
+    processFinished=Qt.pyqtSignal([int,int])
+    
+    
     def __init__(self, parent = None, process = None, args = ()):
-        Qt.QX11EmbedContainer.__init__(self, parent)
-
+        Qt.QWidget.__init__(self, parent)
+        
+        self.layout = Qt.QGridLayout(self)
         self._label = None
         self._proc = None
         self._process = process
         self._args = args
+        
+        self.container=Qt.QWindow.fromWinId(self.winId())
+        self.display=self.createWindowContainer(self.container,self)
+        self.layout.addWidget(self.display)
+        
+        self.parent=parent
+        self.pwinId=parent.winId()
 
     def start(self, process = None, args = ()):
+        
         process = process or self._process
         args = args or self._args
 
@@ -34,23 +47,25 @@ class PApplicationContainer(Qt.QX11EmbedContainer):
         self._process = process
         self._args = args
 
-        self._proc = Qt.QProcess(self)
+        self._proc = Qt.QProcess(self.container)
         self._proc.finished.connect(self._finished)
         self._proc.start(process, args)
-
+        
+        print self.getWID()
         self.clientClosed.connect(self._proc.close)
 
         return (True, "'%s' process successfully started with pid = %s" % (process, self._proc.pid()))
 
     def closeEvent(self, event):
         if self.isRunning():
+            self.clientClosed.emit()
             self._proc.terminate()
             self._showMessage("Terminating process %s" % self._process)
             self._proc.waitForFinished()
         event.accept()
 
     def _finished(self, exitCode, exitStatus):
-        self.emit(Qt.SIGNAL("processFinished"), exitCode, exitStatus)
+        self.processFinished.emit(exitCode, exitStatus)
         if exitCode != 0:
             self._showMessage("%s process finished with code %s" % (self._process, exitCode))
         else:
@@ -69,3 +84,18 @@ class PApplicationContainer(Qt.QX11EmbedContainer):
         return not self._proc.state() == Qt.QProcess.NotRunning
 
 
+    def getWID(self):
+        import os
+        filename=self._args[0].split("/")[-1]
+        
+        running=os.system("xwininfo -name \"{} - mpv\"".format(filename))
+        if (not running==0):
+            return "process NotRunning"
+        
+        xwininfo=os.popen("xwininfo -name \"{} - mpv\"".format(filename))
+        xwininfo_out=xwininfo.read()
+        xwininfo.close()
+        xwininfo_out=xwininfo_out.split("\n")
+        xwininfo_out=xwininfo_out[1]
+        winId=xwininfo_out.split(" ")[3]
+        return winId

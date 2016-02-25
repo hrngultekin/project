@@ -60,7 +60,7 @@ def update_messages():
     #UI files for pure-qt
     else :
         for filename in glob.glob1("ui", "*.ui"):
-            os.system("pyuic4 -o ui/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
+            os.system("py2uic5 -o ui/ui_%s.py ui/%s" % (filename.split(".")[0], filename))#, PROJECT))
 
     # Collect headers for desktop files
     for filename in glob.glob("data/*.desktop.in"):
@@ -123,12 +123,12 @@ class Build(build):
         # Collect UI for pure-qt
         else:
             for filename in glob.glob1("ui", "*.ui"):
-                os.system("pyuic4 -o build/servicemanager/ui_%s.py ui/%s -g %s" % (filename.split(".")[0], filename, PROJECT))
+                os.system("py2uic5 -o build/servicemanager/ui_%s.py ui/%s" % (filename.split(".")[0], filename))#, PROJECT))
 
 
         print "Generating RCs..."
         for filename in glob.glob1("data", "*.qrc"):
-            os.system("pyrcc4 data/%s -o build/%s_rc.py" % (filename, filename.split(".")[0]))
+            os.system("py2rcc5 data/%s -o build/%s_rc.py" % (filename, filename.split(".")[0]))
 
 class Install(install):
     def run(self):
@@ -171,7 +171,7 @@ class Install(install):
 
         shutil.copy("data/%s.desktop" % PROJECT, apps_dir)
         
-        shutil.copy("data/flag-yellow.png" % PROJECT, pixmap_dir)
+        shutil.copy("data/flag-yellow.png" , pixmap_dir) #% PROJECT
 
         if FOR_KDE_4:
             shutil.copy("data/kcm_%s.desktop" % PROJECT, services_dir)

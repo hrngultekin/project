@@ -38,7 +38,7 @@ class Kde5(DefaultDe):
     ConfigType           = 'ini'
     #ConfigBin            = 'kde4-config'
     #DefaultIconFile      = '/usr/share/icons/default.kde4'
-    DefaultIconTheme     = 'breeze' # breeze simge teması svg dosyalarından oluşuyor pds pd-ng uzantılı dosyalar açıyor
+    DefaultIconTheme     = 'oxygen' # breeze simge teması svg dosyalarından oluşuyor pds png uzantılı dosyalar açıyor
     IconKey              = 'Icons/Theme'
     #try:
     #    from PyKDE4 import kdecore, kdeui

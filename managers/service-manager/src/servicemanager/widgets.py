@@ -12,8 +12,8 @@
 #
 
 # Qt Stuff
-from PyQt4 import QtGui
-from PyQt4.QtCore import *
+from PyQt5 import QtWidgets
+from PyQt5.QtCore import *
 
 # Pds vs KDE
 import servicemanager.context as ctx
@@ -39,17 +39,17 @@ import locale
 # Pisi Stuff
 import pisi
 
-class ServiceItem(QtGui.QListWidgetItem):
+class ServiceItem(QtWidgets.QListWidgetItem):
 
     def __init__(self, package, parent):
-        QtGui.QListWidgetItem.__init__(self, parent)
+        QtWidgets.QListWidgetItem.__init__(self, parent)
 
         self.package = package
 
-class ServiceItemWidget(QtGui.QWidget):
+class ServiceItemWidget(QtWidgets.QWidget):
 
     def __init__(self, package, parent, item):
-        QtGui.QWidget.__init__(self, None)
+        QtWidgets.QWidget.__init__(self, None)
 
         self.ui = Ui_ServiceItemWidget()
         self.ui.setupUi(self)
@@ -78,11 +78,11 @@ class ServiceItemWidget(QtGui.QWidget):
 
         self.type = None
         self.desc = None
-        self.connect(self.ui.buttonStart, SIGNAL("clicked()"), self.setService)
-        self.connect(self.ui.buttonStop, SIGNAL("clicked()"), self.setService)
-        self.connect(self.ui.buttonReload, SIGNAL("clicked()"), self.setService)
-        self.connect(self.ui.checkStart, SIGNAL("clicked()"), self.setService)
-        self.connect(self.ui.buttonInfo, SIGNAL("clicked()"), self.info.showDescription)
+        self.ui.buttonStart.clicked.connect(self.setService)
+        self.ui.buttonStop.clicked.connect(self.setService)
+        self.ui.buttonReload.clicked.connect(self.setService)
+        self.ui.checkStart.clicked.connect(self.setService)
+        self.ui.buttonInfo.clicked.connect(self.info.showDescription)
 
     def updateService(self, data, firstRun):
         self.type, self.desc, serviceState = data
@@ -196,7 +196,7 @@ class ServiceItemInfo(PAbstractBox):
         self.ui.description.setText(desc)
         self.ui.description.setToolTip('\n'.join(textwrap.wrap(desc)))
         self.animate(start = MIDLEFT, stop = MIDCENTER)
-        QtGui.qApp.processEvents()
+        QtWidgets.qApp.processEvents()
 
     def hideDescription(self):
         if self.isVisible():
